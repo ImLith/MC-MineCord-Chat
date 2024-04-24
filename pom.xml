@@ -1,0 +1,102 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.lith.minecordlivechat</groupId>
+  <artifactId>minecordlivechat</artifactId>
+  <version>0.1.0</version>
+
+  <name>MineCordLiveChat</name>
+  <packaging>jar</packaging>
+  <url>https://github.com/ImLith/MC-MineCord-LiveChat</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <repositories>
+    <!-- Paper Repo -->
+    <repository>
+      <id>papermc</id>
+      <url>https://papermc.io/repo/repository/maven-public/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <!-- Paper API -->
+    <dependency>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>1.20.4-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Core -->
+    <dependency>
+      <groupId>com.lith.lithcore</groupId>
+      <artifactId>lithcore</artifactId>
+      <version>0.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- MineCord Core -->
+    <dependency>
+      <groupId>com.lith.minecord</groupId>
+      <artifactId>minecord</artifactId>
+      <version>0.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Discord API -->
+    <dependency>
+      <groupId>net.dv8tion</groupId>
+      <artifactId>JDA</artifactId>
+      <version>5.0.0-beta.22</version>
+    </dependency>
+
+    <!-- Lombok for @Getter and @Setter -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.32</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Emojies -->
+    <dependency>
+      <groupId>com.lith.emojies</groupId>
+      <artifactId>emojies</artifactId>
+      <version>0.0.4</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>${project.name}</finalName>
+    <plugins>
+
+      <!-- Maven Shade Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/versions/17/**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
