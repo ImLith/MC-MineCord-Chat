@@ -18,7 +18,7 @@ public class PlayerLeave implements Listener {
             return;
 
         MineCordPlugin.getDiscordManager().sendMessage(
-                Static.textChannel,
+                plugin.configs.channelId,
                 plugin.configs.dcMsg.leave
                         .replace(Static.MessageKey.PLAYER_NAME, event.getPlayer().getName()));
     }

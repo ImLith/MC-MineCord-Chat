@@ -45,7 +45,7 @@ public class PlayerAchievement implements Listener {
                 : "";
 
         MineCordPlugin.getDiscordManager().sendMessage(
-                Static.textChannel,
+                plugin.configs.channelId,
                 plugin.configs.dcMsg.achievement
                         .replace(Static.MessageKey.PLAYER_NAME, player.getName())
                         .replace(Static.MessageKey.ACHIEVEMENT_NAME, advancementTitle)

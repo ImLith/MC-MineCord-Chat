@@ -4,15 +4,16 @@ import org.bukkit.Bukkit;
 import com.lith.lithcore.abstractClasses.AbstractPlugin;
 import com.lith.lithcore.helpers.ReloadConfigCmd;
 import com.lith.minecord.MineCordPlugin;
-import com.lith.minecord.utils.DiscordChannelUtil;
 import com.lith.minecordlivechat.config.ConfigManager;
+import com.lith.minecordlivechat.events.discord.BotEvent;
+import com.lith.minecordlivechat.events.discord.SendDiscordMessage;
+import com.lith.minecordlivechat.events.discord.SlashCommandEvent;
 import com.lith.minecordlivechat.events.minecraft.PlayerAchievement;
 import com.lith.minecordlivechat.events.minecraft.PlayerChat;
 import com.lith.minecordlivechat.events.minecraft.PlayerDeath;
 import com.lith.minecordlivechat.events.minecraft.PlayerJoin;
 import com.lith.minecordlivechat.events.minecraft.PlayerLeave;
 import lombok.Getter;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.bukkit.plugin.Plugin;
 
 public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager> {
@@ -23,7 +24,6 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
   public void onEnable() {
     configs = new ConfigManager(this);
     MineCordPlugin.getDiscordManager().addGatewayIntent(Static.gatewayIntents);
-
     super.onEnable();
 
     if (configs.mcMsg.addEmojies) {
@@ -39,9 +39,9 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
 
   @Override
   public void onDisable() {
-    if (isValid() && !configs.dcMsg.serverOff.isEmpty())
-      if (MineCordPlugin.getDiscordManager() != null && MineCordPlugin.getDiscordManager().isOnline())
-        MineCordPlugin.getDiscordManager().sendMessage(Static.textChannel, configs.dcMsg.serverOff);
+    if (!configs.dcMsg.serverOff.isEmpty())
+      if (MineCordPlugin.getDiscordManager() != null)
+        MineCordPlugin.getDiscordManager().sendMessage(configs.channelId, configs.dcMsg.serverOff);
 
     super.onDisable();
   }
@@ -55,10 +55,7 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
   @Override
   protected void registerConfigs() {
     super.registerConfigs();
-    Static.textChannel = null;
-
     unregisterAllEvents();
-    validateChannel();
   }
 
   @Override
@@ -68,11 +65,6 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
 
   @Override
   protected void registerEvents() {
-    if (!isValid()) {
-      log.warning("Text channel not found! Check your configs");
-      return;
-    }
-
     if (!configs.dcMsg.format.isEmpty())
       registerEvent(new PlayerChat(this));
 
@@ -86,25 +78,11 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
       registerEvent(new PlayerAchievement(this));
 
     if (configs.dcMsg.onDeath)
-      registerEvent(new PlayerDeath());
-  }
+      registerEvent(new PlayerDeath(this));
 
-  @Override
-  protected void preRegisterRunnables() {
-    if (isValid() && !configs.dcMsg.serverOn.isEmpty() && MineCordPlugin.getDiscordManager() != null)
-      MineCordPlugin.getDiscordManager().sendMessage(
-          Static.textChannel,
-          configs.dcMsg.serverOn);
-  }
-
-  private void validateChannel() {
-    if (MineCordPlugin.getDiscordManager() != null) {
-      TextChannel channel = MineCordPlugin.getDiscordManager().getClient().getTextChannelById(configs.channelId);
-      Static.textChannel = DiscordChannelUtil.isTextChannel(channel) ? channel : null;
-    }
-  }
-
-  private Boolean isValid() {
-    return Static.textChannel != null;
+    MineCordPlugin.getDiscordManager().addEvent(
+        new BotEvent(this),
+        new SendDiscordMessage(this),
+        new SlashCommandEvent(this));
   }
 }

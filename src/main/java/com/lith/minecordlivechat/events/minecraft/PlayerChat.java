@@ -21,7 +21,7 @@ public class PlayerChat implements Listener {
         String msg = PlainTextComponentSerializer.plainText().serialize(event.originalMessage());
 
         MineCordPlugin.getDiscordManager().sendMessage(
-                Static.textChannel,
+                plugin.configs.channelId,
                 plugin.configs.dcMsg.format
                         .replace(Static.MessageKey.PLAYER_NAME, event.getPlayer().getName())
                         .replace(Static.MessageKey.CONTENT, msg));

@@ -20,6 +20,10 @@ public class BotEvent extends ListenerAdapter {
     public void onReady(@Nonnull ReadyEvent event) {
         JDA client = event.getJDA();
 
+        if (!plugin.configs.dcMsg.serverOn.isEmpty())
+            if (MineCordPlugin.getDiscordManager() != null)
+                MineCordPlugin.getDiscordManager().sendMessage(plugin.configs.channelId, plugin.configs.dcMsg.serverOn);
+
         if (plugin.configs.slashCommands.commandsEnabled)
             registerGuildCommands(client);
     }

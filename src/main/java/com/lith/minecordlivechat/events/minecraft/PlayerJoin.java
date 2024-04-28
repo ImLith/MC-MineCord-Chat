@@ -18,7 +18,7 @@ public class PlayerJoin implements Listener {
             return;
 
         MineCordPlugin.getDiscordManager().sendMessage(
-                Static.textChannel,
+                plugin.configs.channelId,
                 plugin.configs.dcMsg.join
                         .replace(Static.MessageKey.PLAYER_NAME, event.getPlayer().getName()));
     }

@@ -5,11 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import com.lith.lithcore.abstractClasses.AbstractConfigKey;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 public class Static {
-    public static TextChannel textChannel = null;
-
     final public static class ConfigKeys {
         public static final String CHANNEL_ID = "channel_id";
 
