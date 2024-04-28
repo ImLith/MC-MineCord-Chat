@@ -4,11 +4,11 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import com.lith.minecord.MineCordPlugin;
 import com.lith.minecordlivechat.LiveChatPlugin;
+import com.lith.minecordlivechat.classes.McMessageBuilder;
+import net.kyori.adventure.text.Component;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 
 @RequiredArgsConstructor
@@ -18,36 +18,24 @@ public class BotEvent extends ListenerAdapter {
 
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
-        JDA client = event.getJDA();
-
         if (!plugin.configs.dcMsg.serverOn.isEmpty())
             if (MineCordPlugin.getDiscordManager() != null)
                 MineCordPlugin.getDiscordManager().sendMessage(plugin.configs.channelId, plugin.configs.dcMsg.serverOn);
-
-        if (plugin.configs.slashCommands.commandsEnabled)
-            registerGuildCommands(client);
     }
 
-    private void registerGuildCommands(JDA client) {
-        if (MineCordPlugin.getPlugin() == null)
+    @Override
+    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
+        if (plugin.configs.mcMsg.format.isEmpty())
             return;
 
-        Long serverId = MineCordPlugin.getPlugin().configs.getServerId();
-        if (serverId == null)
+        McMessageBuilder msgBuilder = new McMessageBuilder(plugin, event);
+        if (!msgBuilder.isValid())
             return;
 
-        Guild guild = client.getGuildById(serverId);
-        if (guild == null)
+        Component msg = msgBuilder.addReplier().build();
+        if (msg == null)
             return;
 
-        if (plugin.configs.slashCommands.online.enabled
-                && !plugin.configs.slashCommands.online.name.isEmpty()) {
-
-            guild.updateCommands().addCommands(
-                    Commands.slash(
-                            plugin.configs.slashCommands.online.name.toLowerCase(),
-                            plugin.configs.slashCommands.online.description))
-                    .queue();
-        }
+        plugin.getServer().broadcast(msg);
     }
 }

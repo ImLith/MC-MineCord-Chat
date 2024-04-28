@@ -4,10 +4,9 @@ import org.bukkit.Bukkit;
 import com.lith.lithcore.abstractClasses.AbstractPlugin;
 import com.lith.lithcore.helpers.ReloadConfigCmd;
 import com.lith.minecord.MineCordPlugin;
+import com.lith.minecordlivechat.commands.discord.OnlineSlashCommand;
 import com.lith.minecordlivechat.config.ConfigManager;
 import com.lith.minecordlivechat.events.discord.BotEvent;
-import com.lith.minecordlivechat.events.discord.SendDiscordMessage;
-import com.lith.minecordlivechat.events.discord.SlashCommandEvent;
 import com.lith.minecordlivechat.events.minecraft.PlayerAchievement;
 import com.lith.minecordlivechat.events.minecraft.PlayerChat;
 import com.lith.minecordlivechat.events.minecraft.PlayerDeath;
@@ -23,7 +22,10 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
   @Override
   public void onEnable() {
     configs = new ConfigManager(this);
-    MineCordPlugin.getDiscordManager().addGatewayIntent(Static.gatewayIntents);
+
+    if (MineCordPlugin.getDiscordManager() != null && !MineCordPlugin.getDiscordManager().isOnline())
+      MineCordPlugin.getDiscordManager().addGatewayIntent(Static.gatewayIntents);
+
     super.onEnable();
 
     if (configs.mcMsg.addEmojies) {
@@ -61,6 +63,9 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
   @Override
   protected void registerCommands() {
     new ReloadConfigCmd<LiveChatPlugin>(this, Static.Command.PermissionKeys.RELOAD, Static.Command.Names.RELOAD);
+
+    if (MineCordPlugin.getDiscordManager() != null && !MineCordPlugin.getDiscordManager().isOnline())
+      MineCordPlugin.getDiscordManager().addCommand(new OnlineSlashCommand(this));
   }
 
   @Override
@@ -80,9 +85,7 @@ public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager
     if (configs.dcMsg.onDeath)
       registerEvent(new PlayerDeath(this));
 
-    MineCordPlugin.getDiscordManager().addEvent(
-        new BotEvent(this),
-        new SendDiscordMessage(this),
-        new SlashCommandEvent(this));
+    if (MineCordPlugin.getDiscordManager() != null && !MineCordPlugin.getDiscordManager().isOnline())
+      MineCordPlugin.getDiscordManager().addEvent(new BotEvent(this));
   }
 }
