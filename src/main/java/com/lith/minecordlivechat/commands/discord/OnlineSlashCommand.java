@@ -42,7 +42,7 @@ public class OnlineSlashCommand implements ISlashCommand {
                         .replace(Static.MessageKey.CURRENT, String.valueOf(onlinePlayers))
                         .replace(Static.MessageKey.MAX, String.valueOf(Bukkit.getMaxPlayers())));
 
-        if (onlinePlayers > 0)
+        if (plugin.configs.slashCommands.online.showUserList && onlinePlayers > 0)
             embedBuilder.setDescription("**" + String.join("** | **", playerNames) + "**");
 
         event.getHook().sendMessageEmbeds(embedBuilder.build()).queue();

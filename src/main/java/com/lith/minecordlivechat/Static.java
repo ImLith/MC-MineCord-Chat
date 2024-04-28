@@ -37,14 +37,13 @@ public class Static {
         }
 
         public static final class Slash_Commands extends AbstractConfigKey {
-            public static final String ENABLE_COMMANDS = setKey("enable_commands");
-
             public static final class Online extends AbstractConfigKey {
                 public static final String ENABLED = setKey("enabled");
                 public static final String NAME = setKey("name");
                 public static final String DESCRIPTION = setKey("description");
                 public static final String IS_EPHEMERAL = setKey("is_ephemeral");
                 public static final String FORMAT = setKey("format");
+                public static final String SHOW_USER_LIST = setKey("show_user_list");
             }
         }
     }

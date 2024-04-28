@@ -32,10 +32,10 @@ minecraft_messages:
 
 # To manage command permissions, use Discord interactions section
 slash_commands:
-  enable_commands: true # Disable/Enable all commands
   online:
     enabled: true
     name: online
     description: Show online users
     is_ephemeral: true # Display only for user (default) or everyone
     format: "Currently online %current% players out of %max%"
+    show_user_list: true # In response, display all users names that are online

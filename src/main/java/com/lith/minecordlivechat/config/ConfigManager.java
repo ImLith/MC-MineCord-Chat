@@ -58,8 +58,6 @@ public class ConfigManager extends AbstractConfigManager<LiveChatPlugin, ConfigM
     }
 
     public final class SlashCommands {
-        public final Boolean commandsEnabled = config.getBoolean(ConfigKeys.Slash_Commands.ENABLE_COMMANDS);
-
         public final Online online = new Online();
 
         public final class Online {
@@ -67,6 +65,7 @@ public class ConfigManager extends AbstractConfigManager<LiveChatPlugin, ConfigM
             public final String name = config.getString(ConfigKeys.Slash_Commands.Online.NAME);
             public final String description = config.getString(ConfigKeys.Slash_Commands.Online.DESCRIPTION);
             public final Boolean isEphemeral = config.getBoolean(ConfigKeys.Slash_Commands.Online.IS_EPHEMERAL);
+            public final Boolean showUserList = config.getBoolean(ConfigKeys.Slash_Commands.Online.SHOW_USER_LIST);
             public final String format = config.getString(ConfigKeys.Slash_Commands.Online.FORMAT);
         }
     }
