@@ -45,11 +45,11 @@
     </dependency>
 
     <!-- Discord API -->
-    <dependency>
+    <!-- <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
       <version>5.0.0-beta.22</version>
-    </dependency>
+    </dependency> -->
 
     <!-- Lombok for @Getter and @Setter -->
     <dependency>

@@ -1,0 +1,41 @@
+channel_id: "YOUR DISCORD CHANNEL ID where you want this functionality to happen" # String
+
+# Leaving any of these values empty will disable the event
+discord_messages:
+  join: "**%player_name%** *Joined the server*"
+  leave: "**%player_name%** *Left the server*"
+  achievement: "**%player_name%** got **%achievement_name%** *%achievement_description%*"
+  death: true # Send onDeath messages
+  server_on: "**Server is online**" # Whenever a server comes online
+  server_off: "**Server is offline**" # Whenever the server goes offline
+  format: "**[%player_name%]** %content%"
+
+# Supports color codes and unicodes
+# Leaving any of these values empty will disable the event
+minecraft_messages:
+  clickable: true # OnClick will invite user to discord if 'server_id' is set
+  prefix: "[DC] <%user_name%>:" # Will be added to any message send from discord to minecraft
+  hover: "Sent from Discord server.\nClick to join!" # Hovering over a selected text segmant will show text
+  format: "&7%content%" # Discord message content. Can also add '%user_name%'
+
+  # Required Emojies (https://github.com/ImLith/MC-Emojies) plugin to work.
+  # Without the plugin - these configs do nothing
+  add_emojies: false # Is not effected by the reload command!
+  after_emojie: "&7" # What to add after the emojie (for text coloring for example)
+  before_emojie: "&r" # What to add before the emojie (recommended to use &r to remove the tint of the text color)
+
+  # Extra elements whenever the user replies to a message
+  reply:
+    icon: "=>" # Icon that is added after <prefix> but before <format> on reply messages
+    hover_user: "[%user_name%]: %content%" # When replying to user message on discord hover text
+    hover_bot: "%content%" # When replying to bot message on discord hover text
+
+# To manage command permissions, use Discord interactions section
+slash_commands:
+  enable_commands: true # Disable/Enable all commands
+  online:
+    enabled: true
+    name: online
+    description: Show online users
+    is_ephemeral: true # Display only for user (default) or everyone
+    format: "Currently online %current% players out of %max%"
