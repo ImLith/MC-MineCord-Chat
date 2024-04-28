@@ -18,13 +18,10 @@ import org.bukkit.plugin.Plugin;
 public class LiveChatPlugin extends AbstractPlugin<LiveChatPlugin, ConfigManager> {
   @Getter
   private Plugin emojiesPlugin = null;
-  @Getter
-  private MineCordPlugin minecord = null;
 
   @Override
   public void onEnable() {
     configs = new ConfigManager(this);
-    minecord = MineCordPlugin.getPlugin();
     MineCordPlugin.getDiscordManager().addGatewayIntent(Static.gatewayIntents);
 
     super.onEnable();
